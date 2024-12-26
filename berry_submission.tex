@@ -1,0 +1,82 @@
+\documentclass[12pt]{article}
+\usepackage{graphicx} % Required for inserting images
+\usepackage{newtxtext} % for times new roman
+\usepackage{parskip} %remove indentation in paragraphs
+\usepackage{geometry}
+\usepackage[style=apa, backend=biber]{biblatex} %citation
+\usepackage{amsmath}
+\usepackage{float} % for table to be fixed at some position
+\usepackage{arydshln} % for dashline
+\linespread{1.25}
+\addbibresource{berry.bib}
+\geometry{
+    a4paper,
+    left=1in,
+    top=1in,
+    top=1in,
+    bottom=1in,
+ }
+
+\begin{document}
+
+\begin{center}
+  \large \textbf{Replication of \textcite{berry1994}: Simple Logit and Nested Logit} \\ \vspace{2mm}
+  \large By Sagar Dahal \\
+\end{center}
+
+\section{Multinomial Logit:}
+Table~\ref{tab1} shows results from a Monte Carlo simulation replicating \textcite{berry1994}'s paper on estimating a simple logit model in 500 duopoly markets. These results closely match those in Berry's original Table 1. In line with the paper's setup, we generated 100 random samples, each with 500 duopoly markets. The reported estimates represent the average across these 100 samples, with standard deviations in parentheses. We estimated the model using both OLS and IV methods, with IV utilizing the observed cost shifter and the competing firm's demand characteristics as instruments.
+
+As shown, OLS systematically underestimates the parameters, with this bias becoming more pronounced when $\sigma_d = 3$ (the standard deviation of unobserved characteristics). This observation supports the idea that the OLS estimates are biased towards zero if the unobserved characteristics (by econometricians) are positively correlated with price. In contrast, IV estimates are much closer to the true values, suggesting that IV effectively reduces bias due to endogeneity. 
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{cccccccccc}
+        \hline
+        &            &     & $\sigma_d = 1$ &  & & & & $\sigma_d = 3$\\
+        \hdashline
+        & True Value & OLS & & IV & & & OLS & & IV \\
+        \hline
+        $\beta_0$ & $5$ & $3.166$ &  & $4.979$  & & & -0.778 & & 4.925\\
+                  &     & (0.252) &  & (0.231) & & & (0.5) & & (0.751) \\
+        $\beta_x$ & $2$ & $1.332$ &  & $1.993$ & & & 0.038 & & 1.975\\
+                  &     & (0.077) &  & (0.084) & & & (0.131) & & (0.255)\\
+        $\alpha$ & $-1$ & $-0.635$ &  & $-0.996$ & & & 0.107 & & -0.986\\
+                &       & (0.052)  &  & (0.046) & &  & (0.099) & & (0.144) \\
+        \hline
+        \end{tabular}
+    \caption{Monte Carlo Replication of Table 1 Berry(1994) - Simple Logit}
+    \label{tab1}
+\end{table}
+
+\section{Nested Logit:}
+We extend the simple logit model described above to a nested logit specification. For this, we generated 100 random samples, each consisting of 500 markets with 4 single-product firms per market. The products are grouped into nests: $\{0\}$, $\{1,2\}$, $\{3,4\}$, with a common nesting parameter $\phi = 0.5$. The exogenous variables ($x_j, \xi_j, w_j, \omega_j$) are drawn from independent standard normal distributions, as in the previous setup.
+
+Table~\ref{tab2} presents the results from this Monte Carlo simulation. As before, the reported estimates are the averages across the 100 samples, with standard deviations shown in parentheses. The findings are qualitatively similar to those in the simpler logit model: OLS estimates remain biased, with this bias worsening as $\sigma_d$ (the standard deviation of unobserved characteristics) increases. In contrast, the IV estimates closely approximate the true parameters, indicating that IV effectively addresses endogeneity in the model. The instruments used in this setup are the observed cost shifter and the demand characteristics of other firm within the same nest.
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{cccccccccc}
+        \hline
+        &            &     & $\sigma_d = 1$ &  & & & & $\sigma_d = 3$\\
+        \hdashline
+        & True Value & OLS & & IV & & & OLS & & IV \\
+        \hline
+        $\beta_0$ & $5$ & $2.891$ &  & $5.037$  & & & 1.396 & & 5.326\\
+                  &     & (0.072) &  & (0.221) & & & (0.134) & & (1.699) \\
+        $\beta_x$ & $2$ & $0.947$ &  & $2.021$ & & & 0.092 & & 2.272\\
+                  &     & (0.034) &  & (0.13) & & & (0.05) & & (1.344)\\
+        $\alpha$ & $-1$ & $-0.415$ &  & $-1.012$ & & & 0.026 & & $-1.144$\\
+                &       & (0.018)  &  & (0.071) & &  & (0.023) & & (0.706) \\
+        $\phi$ & $0.5$ & $0.814$ &  & $0.492$ & & & 0.974 & & 0.354\\
+                &       & (0.011)  &  & (0.075) & &  & (0.011) & & (0.719) \\
+        \hline
+        \end{tabular}
+    \caption{Monte Carlo Simulation Results - Nested Logit}
+    \label{tab2}
+\end{table}
+
+\printbibliography
+
+\tiny\textcolor{blue}{\textit{Note: The python codes for these simulations are submitted separately as Jupyter notebook files. The simple logit simulation is in \textbf{Dahal$\_$berry$\_$logit.ipynb}, and the nested logit simulation is in \textbf{Dahal$\_$berry$\_$nestedlogit.ipynb}.}}
+\end{document}
